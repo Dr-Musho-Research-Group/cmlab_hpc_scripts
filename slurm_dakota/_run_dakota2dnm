@@ -1,0 +1,19 @@
+#!/bin/sh
+
+p1=`awk 'NR==2{print $1}' < $1`
+p2=`awk 'NR==3{print $1}' < $1`
+p3=`awk 'NR==4{print $1}' < $1`
+p4=`awk 'NR==5{print $1}' < $1`
+p5=`awk 'NR==6{print $1}' < $1`
+
+fn=`echo $1 | sed 's/\./ /g'| awk '{print "run" $3}'`
+
+r1=`/users/tdmusho/src/nim/nim $p1 $p3 $p2 $p4 $p5|awk '{x=0;if(NR==1){x=$2;print x}}'`
+
+echo $r1 > $2
+#echo $p1 >> $2
+#echo $p2 >> $2
+#echo $p3 >> $2
+#echo $p4 >> $2
+
+

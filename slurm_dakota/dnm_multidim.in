@@ -1,0 +1,50 @@
+# Dakota INPUT FILE - DNM Optimizer
+
+environment
+  tabular_data
+    tabular_data_file = 'dnm_multidim.dat' 
+  write_restart = 'dnm.rst'
+
+method
+  max_function_evaluations = 2000000
+  final_solutions = 5
+  output silent
+  soga
+    initialization_type unique_random
+    fitness_type merit_function
+    mutation_type replace_uniform
+      mutation_rate 0.25
+    crossover_type shuffle_random
+      num_offspring 3
+      num_parents 2
+      crossover_rate 0.8
+    replacement_type elitist
+    convergence_type best_fitness_tracker
+      percent_change = 0.0125 num_generations = 50
+    population_size = 512
+    seed = 8888
+
+model
+  single
+
+variables
+  continuous_design = 4
+    initial_point        1.64357437829   9.10427560895   0.622476681891  178668.202916 
+    lower_bounds         1.0       1.0       0.0      0.0                   
+    upper_bounds         100.0     100.0     1000000.0   1000000              
+    descriptors       'epsilon_1'      'epsilon_2'     'mu_1'    'mu_2' 
+
+interface
+  fork
+  analysis_driver = './_run_dakota2dnm'
+    parameters_file = 'params.in'
+    results_file = 'results.out'
+    file_tag
+    work_directory named  '/scratch/tdmusho/dakota/'
+
+responses
+  objective_functions = 1
+    sense = 'minimization'
+    weights 1
+  no_gradients
+  no_hessians

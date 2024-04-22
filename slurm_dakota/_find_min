@@ -1,0 +1,24 @@
+#!/bin/awk -f
+#
+# This script find the minimum value in a column
+# It was written to be used with DAKOTA
+# 
+# usage: ./_find_min dnm_multidim.dat
+#
+# Written by: Terence Musho
+#
+BEGIN{
+min=1000
+}
+{
+
+if($8<min) {
+  min=$8
+  line=$0
+}
+
+}
+END{
+print min
+print line
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm *.out *.stdout *.rst JEGAGlobal.log params.in.* *.dat

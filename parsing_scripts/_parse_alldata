@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Create a folder for collective results if it doesn't exist
+results_folder="run_shared_collective"
+mkdir -p "$results_folder"
+
+# Output file
+output_file="$results_folder/parsed_parameters.csv"
+
+# Clear the output file and add column headers as a comment
+echo "# Anode_Length_X-dir, Anode_Length_Y-dir, Cathode_Length_X-dir, Cathode_Length_Y-dir, Vacuum_Length_X-dir, Vacuum_Length_Y-dir, Itot, Plate_Workfunction, Emitter_Workfunction, Conduction_Band_Edge_Plate, Conduction_Band_Edge_Emitter, Conduction_Band_Edge_Medium, Emitter_Effective_Mass, Plate_Effective_Mass, Medium_Effective_Mass, Number_Processors, Wall_Time, Wall_Time/Proc, Filename" > "$output_file"
+
+# Loop through each job folder in run_shared_10, run_shared_11, and higher integers
+for job_folder in ./run_shared_{16..31}/job_*/; do
+    echo "Parsing files in $job_folder"
+
+    # Check if there are gfed_*.out files in the current job folder
+    if [ "$(ls -A "$job_folder"gfed_*.out 2>/dev/null)" ]; then
+
+        # Loop through gfed_*.out files in the current job folder
+        for file in "$job_folder"gfed_*.out; do
+            #echo "Parsing file: $file"
+            #echo "============================"
+
+            # Parse parameters using awk and append to the output file
+            awk -v filename="$file"  -v OFS=',' '
+                /Anode Length X-dir/ {anode_x = $NF}
+                /Anode Length Y-dir/ {anode_y = $NF}
+                /Cathode Length X-dir/ {cathode_x = $NF}
+                /Cathode Length Y-dir/ {cathode_y = $NF}
+                /Vacuum Length X-dir/ {vacuum_x = $NF}
+                /Vacuum Length Y-dir/ {vacuum_y = $NF}
+                /^ V, T, Itot/ {itot = $9}
+                /Plate Workfucntion/ {plate_wf = $NF}
+                /Emitter Workfunction/ {emitter_wf = $NF}
+                /Conduction Band Edge Plate/ {plate_conduction_band = $NF}
+                /Conduction Band Edge Emitter/ {emitter_conduction_band = $NF}
+                /Conduction Band Edge Medium/ {medium_conduction_band = $NF}
+		/Emmitter effective mass/ {emitter_effective_mass = $NF/9.10938E-31}
+		/Plate effective mass/ {plate_effective_mass = $NF/9.10938E-31}
+		/Medium effective mass/ {medium_effective_mass = $NF/9.10938E-31}
+                /Number of Processors/ {processors = $NF}
+                /Wall Time/ {wall_time = $4}
+                END {
+                    if (itot != 0.0 && wall_time !=0) {
+                        ratio = wall_time / processors
+                        print anode_x, anode_y, cathode_x, cathode_y, vacuum_x, vacuum_y, itot, plate_wf, emitter_wf, plate_conduction_band, emitter_conduction_band, medium_conduction_band, emitter_effective_mass, plate_effective_mass, medium_effective_mass, processors, wall_time, ratio, filename
+                    }
+                }
+            ' "$file" >> "$output_file"
+
+            echo "============================"
+        done
+    else
+        echo "No gfed_*.out files found in $job_folder"
+    fi
+done
+
+echo "Parsing completed. Output saved to $output_file in $results_folder"
+
