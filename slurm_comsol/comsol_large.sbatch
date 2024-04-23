@@ -5,13 +5,12 @@
 #SBATCH --time=7-04:00:00  # Set the maximum time limit to 7 Days 4 Hours
 #SBATCH --partition=tdmusho # Specify the partition where you want to run the job
 #SBATCH --nodes=1           # Run on 1 node
-#SBATCH --ntasks=80         # Use all 80 cores
+#SBATCH --ntasks=40         # Use all 80 cores
 #SBATCH --mem=171G          # Use 171GB of RAM
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=youremail+hpc@gmail.com
-#SBATCH --nodelist=ttmcm401  # Only include this node
+#SBATCH --exclude=taicm[001-002],ttmcm[100-101]  # Only include this node
 #SBATCH --cpu-freq=performance
-#SBATCH --exclusive
 #SBATCH --oversubscribe    # Allow oversubscription of Node - More Threads than Cores
 
 #  Start by going to the folder where the data for this job is located.
@@ -31,7 +30,7 @@ START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 echo "Job $SLURM_JOB_ID started at: $START_TIME"
 
 # Execute Comsol
-comsol batch -usebatchlic -nn $SLURM_JOB_NUM_NODES -np $SLURM_NTASKS -inputfile bipolar_transistor.mph -outputfile bipolar_transistor_output.mph
+comsol batch -usebatchlic -nn $SLURM_JOB_NUM_NODES -np $SLURM_NTASKS -inputfile CG_VF_H_Perovskite_PT.mph -outputfile Cluster_CG_VF_H_Perovskite_output.mph
 
 # Record the end time when the task completes
 END_TIME=$(date +"%Y-%m-%d %H:%M:%S")
