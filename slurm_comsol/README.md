@@ -73,7 +73,7 @@ These scripts are used to run COMSOL on the WVU HPC system.
 - **Cached:** 1734424 kB
 - **SwapCached:** 184404 kB
 
-### ttmcm401 - comsol_large.sbatch
+### ttmcm[400-401] - comsol_large.sbatch
 
 - **Architecture:** x86_64
 - **CPU op-mode(s):** 32-bit, 64-bit
