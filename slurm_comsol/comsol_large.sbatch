@@ -9,7 +9,7 @@
 #SBATCH --mem=171G          # Use 171GB of RAM
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=youremail+hpc@gmail.com
-#SBATCH --exclude=taicm[001-004],ttmcm[100-101]  # Only include this node
+#SBATCH --nodelist=ttmcm[400-401] #40 Cores with 80 Tasks
 #SBATCH --cpu-freq=performance
 #SBATCH --oversubscribe    # Allow oversubscription of Node - More Threads than Cores
 
