@@ -30,7 +30,7 @@ START_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 echo "Job $SLURM_JOB_ID started at: $START_TIME"
 
 # Execute Comsol
-comsol batch -usebatchlic -nn $SLURM_JOB_NUM_NODES -np 80 -inputfile CG_VF_H_Perovskite_PT.mph -outputfile Cluster_CG_VF_H_Perovskite_output.mph
+comsol batch -usebatchlic -nn $SLURM_JOB_NUM_NODES -np 80 -recoverydir=$RESTART_DIR -inputfile CG_VF_H_Perovskite_PT.mph -outputfile Cluster_CG_VF_H_Perovskite_output.mph
 
 # Record the end time when the task completes
 END_TIME=$(date +"%Y-%m-%d %H:%M:%S")
