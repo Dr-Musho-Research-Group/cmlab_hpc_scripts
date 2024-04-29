@@ -27,7 +27,7 @@ done
 read -p "Enter the path to the sbatch script you want to submit: " sbatch_script
 
 # Submit the new job with dependency
-sbatch -d afterok:$job_id $sbatch_script
+sbatch -d afterany:$job_id $sbatch_script
 
 echo "New job submitted with dependency on job $job_id."
 
