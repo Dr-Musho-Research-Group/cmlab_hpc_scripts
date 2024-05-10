@@ -4,17 +4,14 @@
 #SBATCH --error=comsol_batch.err
 #SBATCH --time=7-04:00:00  # Set the maximum time limit to 7 Days 4 Hours
 #SBATCH --partition=tdmusho # Specify the partition where you want to run the job
-#SBATCH --nodes=1           # Run on 1 node
+#SBATCH --nodes=2           # Run on 2 node up to 4 nodes
 #SBATCH --ntasks-per-node=40         # Use all 80 cores
 #SBATCH --mem=171G          # Use 171GB of RAM
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=ap0118@mix.wvu.edu
-#SBATCH --nodelist=ttmcm[400-401] #40 Cores with 80 Tasks
+#SBATCH --nodelist=ttmcm[400-401],taicm[001-004] #40 Cores with 40 Tasks
 #SBATCH --cpu-freq=performance
 #SBATCH --exclusive    # Allow oversubscription of Node - More Threads than Cores
-
-#Set 2 OPENMP Threads per Task
-export OMP_NUM_THREADS=2
 
 #  Input Files and Output Files for COMSOL
 INPUT_COMSOL=CG_VF_H_Perovskite_PT.mph
